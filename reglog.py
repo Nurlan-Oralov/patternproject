@@ -15,13 +15,13 @@ def init_file():  # Инициализация файла, если этого �
 def create_json(login: str):
     data = {
         "name": login,
-        "income": [{
+        "income": {
+            "name_income": None,
             "needs": None,
             "wants": None,
             "saves": None,
         }
-        ],
-        "outcome": None,
+        ,
         "loans": None,
         "saves": None,
         "overall_report": None,
