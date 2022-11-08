@@ -5,17 +5,14 @@ import reglog
 
 
 def income():
-    print('Назовите ваши доходы:\n'
-          'example: "name_of_income" "amount of money"')
+    while True:
+        decision = input('Хотите добавить доход? Yes/No')
 
-    income_input = input().split()
-    print(income_input)
-    return menu()
-
-
-def outcome():
-    print('outcome')
-    return menu()
+        if decision == "Yes":
+            new_point = input("Добавьте свой пункт дохода\n"
+                              'Пример: "Название дохода" "Сумма дохода"\n')
+            print()
+            income()
 
 
 def loans():
