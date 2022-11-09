@@ -52,6 +52,9 @@ class Saves(IIncome):
 
 
 if __name__ == "__main__":
+
+    def decorator():
+
     def print_result(result: IDecorator) -> None:
         print(f"Часть {result.name()} будет равна {result.account()}")
 

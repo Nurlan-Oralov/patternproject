@@ -2,26 +2,48 @@ import os
 import rich
 import abc
 import reglog
+import observer
+import strategy
+import decorator
+from rich.console import Console
+from rich.table import Table
 
 
 def income():
+    boolean = "no"
+    table = Table(title="Income")
+    print ("trigger2")
     while True:
-        decision = input('Хотите добавить доход? Yes/No')
 
-        if decision == "Yes":
-            new_point = input("Добавьте свой пункт дохода\n"
-                              'Пример: "Название дохода" "Сумма дохода"\n')
-            print()
-            income()
+        name = input("Добавьте свой пункт дохода\n")
+        if name == "no" :
+            break
+        value = input("Добавьте сумму дохода")
+        if boolean == "no":
+            create_table(name, value, table, boolean)
+            boolean = "yes"
+        else:
+            create_table(name, value, table, boolean)
+
+
+def create_table(name, value, table, boolean):
+
+    if boolean == "no":
+        table.add_column("Type of Income", justify="right", style="cyan", no_wrap=True)
+        table.add_column("Amount", style="magenta")
+        table.add_column("needs", style="magenta")
+        table.add_column("saves", style="magenta")
+        table.add_column("wants", style="magenta")
+
+
+    table.add_row(f"{name}", f"{value}", f"{int(value) * 0.5}", f"{int(value) * 0.3}", f"{int(value) * 0.2}")
+    console = Console()
+    console.print(table)
+
 
 
 def loans():
     print('Loans')
-    return menu()
-
-
-def saves():
-    print('saves')
     return menu()
 
 
@@ -43,7 +65,7 @@ def menu():
         case "1":
             return income()
         case "2":
-            return outcome()
+            pass
         case "3":
             return loans()
         case "4":
