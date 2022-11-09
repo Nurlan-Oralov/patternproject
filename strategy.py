@@ -1,60 +1,62 @@
-from abc import ABC, abstractmethod
+import abc
 
 
-class CompanySystem:
-    """'Система отчетов компании"""
-
-    def __init__(self):
-        self._observers = set()
-
-    def attach(self, observer):
-        self._observers.add(observer)
-
-    def detach(self, observer):
-        self._observers.remove(observer)
-
-    def chief_order_notify(self):
-        for observer in self._observers:
-            observer.make_report()
-
-
-class AbstractObserver(ABC):
-    @abstractmethod
-    def make_report(self):
+class Reader(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def parse(self, report):
         pass
 
 
-class Department(AbstractObserver):
-    """"Департамент компании"""
+class ResourceReader:
+    def __init__(self, reader: Reader):
+        self.__reader = reader
 
-    def __init__(self, name):
-        self.department_name = name
+    def set_strategy(self, reader: Reader):
+        self.__reader = reader
 
-    def make_report(self):
-        print("{} сделал отчет".format(self.department_name))
+    def read(self, report: str):
+        self.__reader.parse(report)
 
 
-# Наши департаменты
-preProduction = Department("Препродакшн")
-production = Department("Продакшн")
-postProduction = Department("Постпродакшн")
-finances = Department("отдел финансов")
-hrs = Department("Отдел кадров")
+class Income(Reader):
+    def parse(self, report: str):
+        print("Отчет доходов: ", report)
 
-# Управление компанией
-companySystem = CompanySystem()
 
-# Шефу нужны все отчеты по продакшонам
-companySystem.attach(preProduction)
-companySystem.attach(production)
-companySystem.attach(postProduction)
+class Outcome(Reader):
+    def parse(self, report: str):
+        print("Отчет с расходов: ", report)
 
-companySystem.chief_order_notify()
 
-# Шефу нужен отчет по финансам
-companySystem.detach(preProduction)
-companySystem.detach(production)
-companySystem.detach(postProduction)
-companySystem.attach(finances)
+class Loan_overall(Reader):
+    def parse(self, report: str):
+        print("Отчет общей суммы кредита/задолженности: ", report)
 
-companySystem.chief_order_notify()
+
+class Loan_need_to_pay(Reader):
+    def parse(self, report: str):
+        print("Отчет сколько осталось оплатить по кредиту/задолженности: ", report)
+
+
+if __name__ == "__main__":
+    income = 0
+    outcome = 0
+    loan_overall = 0
+    loan_need_to_pay = 0
+
+
+    resource_reader = ResourceReader(Income())
+    report = "500000"
+    resource_reader.read(report)
+
+    resource_reader.set_strategy(Outcome())
+    report = "100000"
+    resource_reader.read(report)
+
+    resource_reader.set_strategy(Loan_overall())
+    report = "100000000"
+    resource_reader.read(report)
+
+    resource_reader.set_strategy(Loan_need_to_pay())
+    report = "1000000"
+    resource_reader.read(report)
